@@ -8,8 +8,9 @@ RUN apk update && \
   update-ca-certificates && \   
   apk add --no-cache --update openssl
   
-RUN wget https://www.snort.org/rules/community && \                                                                                                                                                                                                                   
-tar -C /etc/snort/community && \
+RUN wget https://www.snort.org/rules/community && \
+ls -al && \                                                                                                                                                                                                                   
+tar -xvzf ./community -C /etc/snort && \
 rm -f /tmp/* /etc/apk/cache/* ./community
   
 ENTRYPOINT ["snort -v -b -c /etc/snort/snort.conf"]

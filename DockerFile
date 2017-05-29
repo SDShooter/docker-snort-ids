@@ -14,3 +14,4 @@ rm -f /tmp/* /etc/apk/cache/* ./community
   
 ENTRYPOINT ["snort -v -b -c /etc/snort/snort.conf"]
 #CMD ["--help"]
+#

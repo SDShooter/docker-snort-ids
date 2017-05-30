@@ -1,22 +1,10 @@
-FROM alpine
+FROM RELICX/docker-snort-ids:latest
 
-MAINTAINER Bill Harris (https://github.com/SDShooter)
+RUN wget https://www.snort.org/rules/snortrules-snapshot-${snort-rules-version}.tar.gz?oinkcode=${oinkcode} && \
+   tar -xzvf  -C /etc/snort
 
-RUN apk update && \
-  apk add --no-cache snort && \
-  apk add --no-cache ca-certificates wget && \             
-  update-ca-certificates && \   
-  apk add --no-cache --update openssl
-
-ENV snortversion=2990
-ENV oinkcode=8a5779d51c126491421ae468864f54b468b06e0f
-
-RUN wget https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode && \
-tar -xzvf snortrules-snapshot-$snortversion.tar.gz  -C /etc/snort && \
 #RUN wget https://www.snort.org/rules/community && \                                                                                                                                                                                                          
-#  tar -xzvf ./community -C /etc/snort
-
-  
+#  tar -xzvf ./community -C /etc/snort  
   
 #RUN wget https://www.snort.org/documents/classification-config && \
 # 	mkdir /var/lib/snort/etc && \

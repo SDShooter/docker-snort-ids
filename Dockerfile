@@ -11,13 +11,41 @@ RUN apk update && \
 ENV snortversion=2990
 ENV oinkcode=8a5779d51c126491421ae468864f54b468b06e0f
 
-RUN wget https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode && \
-tar -xzvf snortrules-snapshot-$snortversion.tar.gz  -C /etc/snort && \
-#RUN wget https://www.snort.org/rules/community && \                                                                                                                                                                                                          
-#  tar -xzvf ./community -C /etc/snort
+RUN wget -O snort-rules.tar.gz https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode
+RUN mkdir /tmp/snort && \
+	tar -xzf snort-rules.tar.gz  -C /etc/snort
+#cp -rfv /tmp/snort/etc* /etc/snort
 
-  
-  
+#RUN ls -al /etc/snort/
+#Copy rules (tar left a mess extracting directly, but snort.config has ..\path references that force the extra /etc folder) 
+#RUN cp -rfv /etc/snort/etc/preproc_rules /etc/snort && \
+#	cp -rfv /etc/snort/etc/rules /etc/snort && \
+#	cp -rfv /etc/snort/etc/so_rules /etc/snort
+
+RUN ls -al /etc/snort/*
+
+##link some direcories
+RUN ln -s /usr/lib/snort_dynamicpreprocessor/ /usr/local/lib/ && \   
+	ln -s /usr/lib/snort_dynamicengine/ /usr/local/lib/ && \
+	ln -s /usr/lib/snort_dynamicrules/ /usr/local/lib/ 
+	
+#RUN ls /usr/local/lib/snort_dynamicrules/
+#RUN find / -name  "snort_dynamicpreprocesso*"
+	
+RUN ls -al etc/snort/etc
+#RUN mv /tmp/snort/
+#etc/
+#etc/classification.config
+#etc/reference.config
+#etc/sid-msg.map
+#etc/snort.conf
+#etc/threshold.conf
+#etc/unicode.map
+#preproc_rules/
+#preproc_rules/decoder.rules
+#preproc_rules/preprocessor.rules
+#preproc_rules/sensitive-data.rules
+ 
 #RUN wget https://www.snort.org/documents/classification-config && \
 # 	mkdir /var/lib/snort/etc && \
 #    mv ./classification-config /etc/snort/community-rules/classification.config
@@ -32,7 +60,7 @@ tar -xzvf snortrules-snapshot-$snortversion.tar.gz  -C /etc/snort && \
 #RUN wget https://www.snort.org/downloads/community/community-rules.tar.gz && \	
 #tar -xzv ./community-rules.tar.gz -C /etc/snort/rules/ 
 #RUN cat /etc/snort/rules/community-rules/community.rules
-RUN rm -f /tmp/* /etc/apk/cache/* ./community ./community-rules.tar.gz
+RUN rm -rf /tmp/* /etc/apk/cache/*
 	
 
   

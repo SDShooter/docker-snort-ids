@@ -7,6 +7,7 @@ RUN apk update && \
   update-ca-certificates
   
 ENV snortversion=2990
+#Oink code is no longer valid, but hoping it will serve non-licensed files
 ENV oinkcode=8a5779d51c126491421ae468864f54b468b06e0f
    
 RUN wget -O snort-rules.tar.gz https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode && \

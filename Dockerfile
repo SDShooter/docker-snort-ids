@@ -3,17 +3,23 @@ FROM alpine
 MAINTAINER Bill Harris (https://github.com/SDShooter)
 
 RUN apk update && \
-  apk add --no-cache snort && \
-  apk add --no-cache ca-certificates wget && \             
-  update-ca-certificates && \   
-  apk add --no-cache --update openssl
+  apk add --update snort openssl ca-certificates wget && \
+  update-ca-certificates
 
+  # alpine-sdk linux-headers libpcap-dev libdnet-dev daq-static-dev pcre-dev tcpdump tcpflow cvs bison flex     
+  
 ENV snortversion=2990
 ENV oinkcode=8a5779d51c126491421ae468864f54b468b06e0f
 
-RUN wget -O snort-rules.tar.gz https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode
-RUN mkdir /tmp/snort && \
-	tar -xzf snort-rules.tar.gz  -C /etc/snort
+#RUN wget --quiet -O snort.tar.gz https://snort.org/downloads/snort/snort-2.9.9.0.tar.gz && \
+#    wget --quiet -O daq.tar.gz https://snort.org/downloads/snort/daq-2.0.6.tar.gz && \
+#    mkdir /usr/src/ && \
+#   tar -xzf snort.tar.gz -C /usr/src && \
+#   tar -xzf daq.tar.gz -C /usr/src && \
+   
+RUN wget -O snort-rules.tar.gz https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode && \
+	tar -xzf snort-rules.tar.gz -C /etc/snort
+	
 #cp -rfv /tmp/snort/etc* /etc/snort
 
 #RUN ls -al /etc/snort/
@@ -22,14 +28,16 @@ RUN mkdir /tmp/snort && \
 #	cp -rfv /etc/snort/etc/rules /etc/snort && \
 #	cp -rfv /etc/snort/etc/so_rules /etc/snort
 
-RUN ls -al /etc/snort/*
-
 ##link some direcories
-RUN ln -s /usr/lib/snort_dynamicpreprocessor/ /usr/local/lib/ && \   
-	ln -s /usr/lib/snort_dynamicengine/ /usr/local/lib/ && \
-	ln -s /usr/lib/snort_dynamicrules/ /usr/local/lib/ 
-	
-#RUN ls /usr/local/lib/snort_dynamicrules/
+RUN ln -sv /usr/lib/snort_dynamicpreprocessor/ /usr/local/lib/ && \   
+	ln -s /usr/lib/snort_dynamicengine /usr/local/lib/ && \
+	ln -s /usr/lib/snort_dynamicrules /usr/local/lib/ 
+
+#RUN ls -al /usr/lib/snort_dynamicpreprocessor/
+#RUN ls -al /usr/local/lib/snort_dynamicpreprocessor/
+#RUN ls -al /etc/snort/*
+
+#ls -al /usr/local/lib/snort_dynamicrules/
 #RUN find / -name  "snort_dynamicpreprocesso*"
 	
 RUN ls -al etc/snort/etc

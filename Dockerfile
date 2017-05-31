@@ -6,21 +6,15 @@ MAINTAINER Bill Harris (https://github.com/SDShooter)
 
 RUN apk update && \
   apk add --update snort openssl ca-certificates wget && \
-  update-ca-certificates
+  update-ca-certificates && \ 
+  rm -rf /tmp/* 
    
 #RUN wget -O snort-rules.tar.gz https://www.snort.org/rules/snortrules-snapshot-$snortversion.tar.gz?oinkcode=$oinkcode && \
-#RUN wget -O snort-rules.tar.gz https://www.snort.org/rules/community.tar.gz && \
 #	tar -xzf snort-rules.tar.gz -C /etc/snort
 
 RUN ln -sv /usr/lib/snort_dynamicpreprocessor/ /usr/local/lib/ && \   
 	ln -s /usr/lib/snort_dynamicengine /usr/local/lib/ && \
-	ln -s /usr/lib/snort_dynamicrules /usr/local/lib/ 
-
-	
-#RUN ls -al /etc/snort/*
-#ls -al /usr/local/lib/snort_dynamicrules/
-#RUN find / -name  "snort_dynamicpreprocesso*"
-	
+	ln -s /usr/lib/snort_dynamicrules /usr/local/lib/ 	
 
 ENTRYPOINT ["snort"]
 CMD ["--help"]
